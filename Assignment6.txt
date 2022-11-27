@@ -1,0 +1,90 @@
+mysql> Delimiter //
+mysql> create database 3333ass6; //
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use 3333ass6; //
+Database changed
+mysql> create table o_roll(roll int,name varchar(20));
+    -> //
+Query OK, 0 rows affected (0.19 sec)
+
+mysql> create table n_roll(roll int,name varchar(20));
+    -> //
+Query OK, 0 rows affected (0.21 sec)
+
+mysql> insert into o_roll values
+    -> (101, "Mustafa"),
+    -> (102, "Rinku"); //
+Query OK, 2 rows affected (0.04 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into n_roll values
+    -> (101, "Mayank"),
+    -> (103, "Reshul"); //
+Query OK, 2 rows affected (0.05 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> create procedure roll_list() 
+    ->begin declare old_roll int; 
+    ->declare old_name varchar(20); 
+    ->declare exit_con boolean; 
+    ->declare c1 cursor for select roll from o_roll;  
+    ->declare continue handler for not found set exit_con=TRUE;  
+    ->open c1; 
+    ->l1: loop 
+    ->fetch c1 into old_roll; 
+    ->if not exists (select * from n_roll where roll = old_roll) then 
+    ->insert into n_roll select *from o_roll where roll= old_roll; 
+    ->end if; 
+    ->if exit_con then close c1; 
+    ->leave l1; 
+    ->end if; 
+    ->end loop; 
+    ->end; 
+    ->//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select *from o_roll; //
++------+----------+
+| roll | name     |
++------+----------+
+|  101 | Mustafa  |
+|  102 | Rinku    |
++------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select *from n_roll; //
++------+--------+
+| roll | name   |
++------+--------+
+|  101 | Mayank |
+|  103 | Reshul |
++------+--------+
+2 rows in set (0.00 sec)
+
+
+mysql> call roll_list(); //
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select *from n_roll;
+    -> //
++------+----------+
+| roll | name     |
++------+----------+
+|  101 | Mayank   |
+|  103 | Reshul   |
+|  102 | Rinku    |
++------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select *from o_roll;
+    -> //
++------+--------+
+| roll | name   |
++------+--------+
+|  101 | Mayank |
+|  103 | Reshul |
++------+--------+
+2 rows in set (0.00 sec)
+
+

@@ -1,0 +1,49 @@
+> use 3333ass3
+switched to db 3333ass9
+> db.user.insert([{name:"naveen",age:"19",branch:"comp-a",rollno:"3333"},
+... {name:"ashraf",age:"20",branch:"comp-b",rollno:"3331"},
+... {name:"manish",age:"21",branch:"it",rollno:"3329"}])
+BulkWriteResult({
+	"writeErrors" : [ ],
+	"writeConcernErrors" : [ ],
+	"nInserted" : 3,
+	"nUpserted" : 0,
+	"nMatched" : 0,
+	"nModified" : 0,
+	"nRemoved" : 0,
+	"upserted" : [ ]
+})
+> db.user.find()
+{ "_id" : ObjectId("632a99c9a29bfc905614f13b"), "name" : "naveen", "age" : "19", "branch" : "comp-a", "rollno" : "3333" }
+{ "_id" : ObjectId("632a99c9a29bfc905614f13c"), "name" : "ashraf", "age" : "20", "branch" : "comp-b", "rollno" : "3331" }
+{ "_id" : ObjectId("632a99c9a29bfc905614f13d"), "name" : "manish", "age" : "21", "branch" : "it", "rollno" : "3329" }
+
+> db.user.find({"name":"naveen"})
+{ "_id" : ObjectId("632a99c9a29bfc905614f13b"), "name" : "naveen", "age" : "19", "branch" : "comp-a", "rollno" : "3333" }
+> db.records.updateMany({name:"manish"},{$set:{age:"22"}})
+{ "acknowledged" : true, "matchedCount" : 0, "modifiedCount" : 0 }
+
+> db.users.find()
+> db.user.updateMany({name:"manish"},{$set:{age:"22"}})
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.user.find()
+
+{ "_id" : ObjectId("632a99c9a29bfc905614f13b"), "name" : "naveen", "age" : "19", "branch" : "comp-a", "rollno" : "3333" }
+{ "_id" : ObjectId("632a99c9a29bfc905614f13c"), "name" : "ashraf", "age" : "20", "branch" : "comp-b", "rollno" : "3331" }
+{ "_id" : ObjectId("632a99c9a29bfc905614f13d"), "name" : "manish", "age" : "22", "branch" : "it", "rollno" : "3329" }
+
+> db.user.remove({name:"ashraf"})
+WriteResult({ "nRemoved" : 1 })
+> db.user.find()
+\{ "_id" : ObjectId("632a99c9a29bfc905614f13b"), "name" : "naveen", "age" : "19", "branch" : "comp-a", "rollno" : "3333" }
+{ "_id" : ObjectId("632a99c9a29bfc905614f13d"), "name" : "manish", "age" : "22", "branch" : "it", "rollno" : "3329" }
+
+> db.user.find({$or : [{age :"22"},{name:"naveen"}]})
+{ "_id" : ObjectId("632a99c9a29bfc905614f13b"), "name" : "naveen", "age" : "19", "branch" : "comp-a", "rollno" : "3333" }
+{ "_id" : ObjectId("632a99c9a29bfc905614f13d"), "name" : "manish", "age" : "22", "branch" : "it", "rollno" : "3329" }
+
+> db.user.find({$and : [{age :"19"},{name:"naveen"}]})
+{ "_id" : ObjectId("632a99c9a29bfc905614f13b"), "name" : "naveen", "age" : "19", "branch" : "comp-a", "rollno" : "3333" }
+
+> 
+

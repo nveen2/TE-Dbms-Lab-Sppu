@@ -1,0 +1,96 @@
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| 3333ass4           |
+| aaaa               |
+| adarsh             |
+| ass4               |
++--------------------+
+13 rows in set (0.495 sec)
+
+MariaDB [(none)]> use 3333ass4;
+Database changed
+
+MariaDB [3333ass4]> show tables;
++--------------------+
+| Tables_in_3333ass4 |
++--------------------+
+| Borrower           |
+| Fine               |
++--------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [3333ass4]> select *from Borrower;
++--------+---------+-------------+--------+-----------+
+| Rollno | Name    | Dateifissue | Status | book_name |
++--------+---------+-------------+--------+-----------+
+|     13 | Naresh  | 2022-07-01  | R      | DBMS      |
+|     14 | Manish  | 2022-07-12  | R      | CN        |
+|     15 | Neelam  | 2022-08-17  | R      | ASD       |
+|     16 | Shubham | 2022-08-20  | R      | ARFC      |
+|     17 | Maheem  | 2022-09-05  | I      | DSA       |
+|     18 | Mahala  | 2022-09-10  | I      | OOP       |
+|     19 | Vishal  | 2022-08-30  | I      | CAT       |
+|     20 | Vijay   | 2022-08-30  | R      | MEC       |
++--------+---------+-------------+--------+-----------+
+8 rows in set (0.000 sec)
+MariaDB [3333ass4]> delimiter //
+MariaDB [3333ass4]> create procedure finecalc(in roll int)
+    -> begin
+    -> declare fine int;
+    -> declare days int;
+    -> declare idate date;
+    -> declare exit handler for SQLEXCEPTION select
+    -> ' create table difinition';
+    -> select Dateifissue into idate from Borrower where Rollno=roll;
+    -> select datediff(curdate(), idate) into days;
+    -> if days>15 and days<=30 then
+    -> set fine=days*5;
+    -> insert into Fine values(roll, curdate(), fine);
+    -> elseif days>30 then
+    -> set fine=((days-30)*50) + 15*5;
+    -> insert into Fine values(roll, curdate(), fine);
+    -> else 
+    -> insert into Fine values(roll, curdate(),0);
+    -> end if;
+    -> update Borrower set Status='R' where Rollno=roll;
+    -> end
+    -> //
+Query OK, 0 rows affected (0.080 sec)
+MariaDB [3333ass4]> call finecalc(13);
+Query OK, 3 rows affected (0.009 sec)
+MariaDB [3333ass4]> call finecalc(14);
+Query OK, 3 rows affected (0.001 sec)
+MariaDB [3333ass4]> call finecalc(15);
+Query OK, 3 rows affected (0.004 sec)
+MariaDB [3333ass4]> call finecalc(16);
+Query OK, 4 rows affected (0.007 sec)
+MariaDB [3333ass4]> call finecalc(17);
+Query OK, 2 rows affected (0.005 sec)
+MariaDB [3333ass4]> call finecalc(18);
+Query OK, 2 rows affected (0.005 sec)
+MariaDB [3333ass4]> call finecalc(19);
+Query OK, 2 rows affected (0.001 sec)
+MariaDB [3333ass4]> call finecalc(20);
+Query OK, 2 rows affected (0.000 sec)
+
+
+MariaDB [3333ass4]> select *from Fine;
++---------+------------+------+
+| Roll_no | Date       | Amt  |
++---------+------------+------+
+|      13 | 2022-09-12 | 2225 |
+|      14 | 2022-09-12 | 1675 |
+|      15 | 2022-09-12 |  130 |
+|      16 | 2022-09-12 |  115 |
+|      17 | 2022-09-12 |    0 |
+|      18 | 2022-09-12 |    0 |
+|      19 | 2022-09-12 |    0 |
+|      20 | 2022-09-12 |    0 |
++---------+------------+------+
+4 rows in set (0.000 sec)
+
+
+

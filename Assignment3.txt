@@ -1,0 +1,170 @@
+select a_id , fname from actor where a_id in  (select a_id from actorcast inner join movie on  movie.m_id=actorcast.m_id where title in ('Sholay','K3G'));
++------+----------+
+| a_id | fname    |
++------+----------+
+|  902 | Shahid   |
+|  903 | Sonali   |
+|  904 | Shraddha |
+|  905 | Kareena  |
++------+----------+
+4 rows in set (0.01 sec)
+select title, fname, lname from movie, director order by title desc;
++------------+----------+------------+
+| title      | fname    | lname      |
++------------+----------+------------+
+| XXX        | Ayush    | Chaturvedi |
+| XXX        | Mahendra | Chaddha    |
+| Sholay     | Kala     | Rajput     |
+| Sholay     | Karan    | Johar      |
+| Neelam     | Ayush    | Chaturvedi |
+| Neelam     | Mahendra | Chaddha    |
+| Neelam     | Kala     | Rajput     |
+| Neelam     | Karan    | Johar      |
+| KeepBreath | Ayush    | Chaturvedi |
+| KeepBreath | Mahendra | Chaddha    |
+| Badla      | Kala     | Rajput     |
+| Badla      | Karan    | Johar      |
++------------+----------+------------+
+20 rows in set (0.00 sec)
+
+mysql> select title, fname, lname from movie, director where release_date<'20190101' order by mrank limit 5;
++------------+-------+------------+
+| title      | fname | lname      |
++------------+-------+------------+
+| Sholay     | Karan | Johar      |
+| KeepBreath | Ayush | Chaturvedi |
+| KeepBreath | Karan | Johar      |
+| Sholay     | Ayush | Chaturvedi |
+| Sholay     | Kala  | Rajput     |
++------------+-------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select distinct(m_id) , count(a_id) as acotrsnob from actorcast 
+    -> group by m_id;
++------+-----------+
+| m_id | acotrsnob |
++------+-----------+
+| 1    |         3 |
+| 2    |         3 |
+| 3    |         3 |
+| 4    |         3 |
+| 5    |         3 |
++------+-----------+
+5 rows in set (0.01 sec)
+
+
+mysql> select role from actorcast where a_id in 
+    -> (select a_id from actor where pay>50000);
++------------+
+| role       |
++------------+
+| Hero       |
+| Villain    |
+| Side Actor |
+| Villain    |
+| Hero       |
+| Villain    |
+| Side Actor |
+| Villain    |
+| Hero       |
+| Villain    |
+| Side Actor |
++------------+
+15 rows in set (0.00 sec)
+
+mysql> select *from movie where m_id in
+    -> (select m_id from
+    -> direct join director on direct.d_id=director.d_id
+    -> where gender='F');
++------+-------+--------------+-------+
+| m_id | title | release_date | mrank |
++------+-------+--------------+-------+
+|    2 | XXX   | 2013-05-15   | D     |
+|    4 | Badla | 2016-10-23   | B     |
++------+-------+--------------+-------+
+2 rows in set (0.01 sec)
+mysql> select distinct actorcast.m_id, actor.fname, actor.lname, actor.pay from
+    -> actor, actorcast where (actor.pay , actorcast.m_id) in (select max(actor.pay), actorcast.m_id from actor,actorcast where actor.a_id=actorcast.a_id group by actorcast.m_id);
++------+----------+--------+--------+
+| m_id | fname    | lname  | pay    |
++------+----------+--------+--------+
+| 1    | Sonali   | Singh  | 156000 |
+| 2    | Sonali   | Singh  | 156000 |
+| 3    | Shraddha | Kapoor | 100000 |
+| 4    | Sonali   | Singh  | 156000 |
+| 5    | Sonali   | Singh  | 156000 |
++------+----------+--------+--------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT * FROM MOVIE NATURAL JOIN DIRECT NATURAL JOIN DIRECTOR
+    -> WHERE DIRECTOR.Fname="Karan" AND DIRECTOR.Lname="Johar";
++------+------+--------+--------------+-------+-------+-------+------+--------+
+| d_id | m_id | title  | release_date | mrank | fname | lname | age  | gender |
++------+------+--------+--------------+-------+-------+-------+------+--------+
+|  201 |    1 | Neelam | 2019-12-02   | C     | Karan | Johar |   23 | M      |
++------+------+--------+--------------+-------+-------+-------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> select actor.fname, actor.lname, actorcast.role from actor cross join actorcast;
++----------+--------+------------+
+| fname    | lname  | role       |
++----------+--------+------------+
+| Kareena  | Kapoor | Hero       |
+| Shraddha | Kapoor | Hero       |
+| Sonali   | Singh  | Hero       |
+| Sonali   | Singh  | Villain    |
+| Shahid   | Kapoor | Villain    |
+| Sharukh  | Khan   | Villain    |
+| Kareena  | Kapoor | Side Actor |
+| Sonali   | Singh  | Side Actor |
+| Shahid   | Kapoor | Side Actor |
+| Sharukh  | Khan   | Side Actor |
+| Kareena  | Kapoor | Villain    |
+| Kareena  | Kapoor | Hero       |
+| Shraddha | Kapoor | Hero       |
+| Sonali   | Singh  | Hero       |
+| Shahid   | Kapoor | Hero       |
+| Sharukh  | Khan   | Hero       |
+| Kareena  | Kapoor | Villain    |
+| Shraddha | Kapoor | Villain    |
+| Sonali   | Singh  | Villain    |
+| Shahid   | Kapoor | Villain    |
+| Sharukh  | Khan   | Villain    |
+| Kareena  | Kapoor | Side Actor |
+| Shahid   | Kapoor | Side Actor |
+| Sharukh  | Khan   | Side Actor |
+| Kareena  | Kapoor | Villain    |
+| Shraddha | Kapoor | Villain    |
+| Sonali   | Singh  | Villain    |
+| Shahid   | Kapoor | Villain    |
+| Sonali   | Singh  | Hero       |
+| Shahid   | Kapoor | Hero       |
+| Sharukh  | Khan   | Hero       |
+| Shahid   | Kapoor | Villain    |
+| Sharukh  | Khan   | Villain    |
+| Kareena  | Kapoor | Side Actor |
+| Sharukh  | Khan   | Side Actor |
++----------+--------+------------+
+75 rows in set (0.01 sec)
+
+mysql> SELECT MOVIE.Title, MOVIE.MRank, MOVIE.Release_Date, Director.Fname, Director.Lname FROM MOVIE LEFT JOIN DIRECT ON DIRECT.m_id = MOVIE.m_id  LEFT JOIN DIRECTOR ON DIRECT.d_id = DIRECTOR.d_id WHERE MOVIE.Release_Date > 20181230 and MOVIE.Release_Date < 20200101;
++--------+-------+--------------+-------+-------+
+| Title  | MRank | Release_Date | Fname | Lname |
++--------+-------+--------------+-------+-------+
+| Neelam | C     | 2019-12-02   | Karan | Johar |
++--------+-------+--------------+-------+-------+
+1 row in set (0.00 sec)
+
+
+mysql> SELECT DISTINCT ACTOR.Fname, ACTOR.Lname, ACTOR.Pay FROM ACTOR
+    -> RIGHT JOIN ACTORCAST ON ACTORCAST.a_id = ACTOR.a_id
+    -> RIGHT JOIN MOVIE ON ACTORCAST.m_id = MOVIE.m_id
+    -> WHERE NOT ACTOR.a_id IN(SELECT ACTOR.a_id FROM ACTOR, ACTORCAST, MOVIE WHERE ACTORCAST.a_id = ACTOR.a_id
+    -> AND MOVIE.m_id = ACTORCAST.m_id AND MOVIE.Title = "XXX");
++----------+--------+--------+
+| Fname    | Lname  | Pay    |
++----------+--------+--------+
+| Shraddha | Kapoor | 100000 |
+| Shahid   | Kapoor |  76000 |
++----------+--------+--------+
+2 rows in set (0.01 sec)

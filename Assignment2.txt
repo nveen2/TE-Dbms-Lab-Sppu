@@ -1,0 +1,496 @@
+mysql> create database naveen3333;
+Query OK, 1 row affected (0.00 sec)
+ 
+mysql> use naveen3333
+Database changed
+mysql> create table movie(m_id int , title varchar(24), release_date date, rank int);
+Query OK, 0 rows affected (0.18 sec)
+ 
+mysql> create table direct(m_id int, d_id int);
+Query OK, 0 rows affected (0.21 sec)
+ 
+mysql> create table actor(a_id varchar(24), fname varchar(24), lname varchar(24));
+Query OK, 0 rows affected (0.20 sec)
+ 
+mysql> create table actorcast(m_id int, a_id int, role varchar(24));
+Query OK, 0 rows affected (0.29 sec)
+ 
+mysql> create table Director(d_id int, fname varchar(24) , lname varchar(24), gender varchar(2));
+Query OK, 0 rows affected (0.20 sec)
+ 
+mysql> insert into movie values(1, 'Don', 20000121, 1000);
+Query OK, 1 row affected (0.04 sec)
+ 
+mysql> insert into Director values(101, 'Manish', 'Singh', 'M');
+Query OK, 1 row affected (0.04 sec)
+ 
+mysql> insert into direct values(1,101);
+Query OK, 1 row affected (0.03 sec)
+ 
+mysql> insert into actor values(201, 'Salman' ,'Khan');
+Query OK, 1 row affected (0.04 sec)
+ 
+mysql> insert into actorcast values(1,201,'Hero');
+Query OK, 1 row affected (0.05 sec)
+ 
+mysql> insert into actorcast values(2,202,'Villain');
+Query OK, 1 row affected (0.05 sec)
+ 
+mysql> select *from actorcast;
++------+------+-----------+
+| m_id | a_id | role      |
++------+------+-----------+
+|    1 |  201 | Hero      |
+|    2 |  202 | Villain   |
+|    3 |  203 | Side_role |
+|    4 |  204 | Hero      |
++------+------+-----------+
+4 rows in set (0.00 sec)
+ 
+mysql> select *from Director;
++------+--------+-----------+--------+
+| d_id | fname  | lname     | gender |
++------+--------+-----------+--------+
+|  101 | Manish | Singh     | M      |
+|  102 | Kavya  | Chaudhary | F      |
+|  103 | Neeta  | Sharma    | F      |
+|  104 | Yash   | Singh     | M      |
++------+--------+-----------+--------+
+4 rows in set (0.00 sec)
+ 
+mysql> create table t_b(a int, b int);
+Query OK, 0 rows affected (0.19 sec)
+ 
+mysql> drop table t_b;
+Query OK, 0 rows affected (0.11 sec)
+ 
+mysql> show tables;
++----------------------+
+| Tables_in_naveen3333 |
++----------------------+
+| Director             |
+| actor                |
+| actorcast            |
+| direct               |
+| movie                |
++----------------------+
+5 rows in set (0.00 sec)
+ 
+mysql> create table tbdelete(a int, b varchar(24));
+Query OK, 0 rows affected (0.19 sec)
+ 
+mysql> delete from tbdelete;
+Query OK, 0 rows affected (0.00 sec)
+ 
+mysql> show tables
+    -> ;
++----------------------+
+| Tables_in_naveen3333 |
++----------------------+
+| Director             |
+| actor                |
+| actorcast            |
+| direct               |
+| movie                |
+| tbdelete             |
++----------------------+
+6 rows in set (0.00 sec)
+ 
+mysql> select *from tbdelete;
+Empty set (0.00 sec)
+ 
+mysql> describe tbdelete;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| a     | int(11)     | YES  |     | NULL    |       |
+| b     | varchar(24) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+ 
+mysql> drop tbdelete;
+ 
+mysql> drop table tbdelete;
+Query OK, 0 rows affected (0.12 sec)
+ 
+mysql> create table tbalter(a int, b int, c varchar(24));
+Query OK, 0 rows affected (0.21 sec)
+ 
+mysql> insert into tbalter values(1,2,'A');
+Query OK, 1 row affected (0.04 sec)
+ 
+mysql> alter table tbalter add column(newlyadded int);
+Query OK, 0 rows affected (0.43 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+ 
+mysql> select *from tbalter
+    -> ;
++------+------+------+------------+
+| a    | b    | c    | newlyadded |
++------+------+------+------------+
+|    1 |    2 | A    |       NULL |
+|    2 |    4 | B    |       NULL |
++------+------+------+------------+
+2 rows in set (0.00 sec)
+ 
+mysql> alter table tbalter drop newlyadded;
+Query OK, 0 rows affected (0.40 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+ 
+mysql> select *from tbalter;
++------+------+------+
+| a    | b    | c    |
++------+------+------+
+|    1 |    2 | A    |
+|    2 |    4 | B    |
++------+------+------+
+2 rows in set (0.00 sec)
+ 
+mysql> alter table tbalter add column(newlyadded int);
+Query OK, 0 rows affected (0.62 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+ 
+mysql> alter table tbalter modify column newlyadded varchar(24);
+Query OK, 2 rows affected (0.64 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+ 
+mysql> select *from tbalter
+    -> ;
++------+------+------+------------+
+| a    | b    | c    | newlyadded |
++------+------+------+------------+
+|    1 |    2 | A    | NULL       |
+|    2 |    4 | B    | NULL       |
++------+------+------+------------+
+2 rows in set (0.00 sec)
+ 
+mysql> update tbalter set a = 5 where c='A';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+ 
+mysql> select *from tbalter;
++------+------+------+------------+
+| a    | b    | c    | newlyadded |
++------+------+------+------------+
+|    5 |    2 | A    | NULL       |
+|    2 |    4 | B    | NULL       |
++------+------+------+------------+
+MariaDB [naveen3333]> create view abc as select m_id,title from movie where 
+    -> release_date = 20000121;
+Query OK, 0 rows affected (0.146 sec)
+ 
+MariaDB [naveen3333]> select *from abc;
++------+-------+
+| m_id | title |
++------+-------+
+|    1 | Don   |
++------+-------+
+1 row in set (0.002 sec)
+ 
+MariaDB [naveen3333]> alter view abc as select M_ID, rank from movie where title ="PK";
+Query OK, 0 rows affected (0.084 sec)
+ 
+MariaDB [naveen3333]> alter view abc as select M_ID, rank from movie where title ="War";
+Query OK, 0 rows affected (0.079 sec)
+ 
+MariaDB [naveen3333]> show tables;
++----------------------+
+| Tables_in_naveen3333 |
++----------------------+
+| Director             |
+| VIEW13               |
+| View                 |
+| abc                  |
+| actor                |
+| actorcast            |
+| direct               |
+| movie                |
+| t_movies             |
+| tbalter              |
+| top_movies           |
++----------------------+
+11 rows in set (0.000 sec)
+ 
+MariaDB [naveen3333]> rename table abc to xyz;
+Query OK, 0 rows affected (0.134 sec)
+ 
+MariaDB [naveen3333]> select *from xyz;
++------+------+
+| M_ID | rank |
++------+------+
+|   13 | A    |
++------+------+
+1 row in set (0.001 sec)
+ 
+MariaDB [naveen3333]> drop view xyz;
+Query OK, 0 rows affected (0.086 sec)
+ 
+MariaDB [naveen3333]> show full tables where table_type="view";
++----------------------+------------+
+| Tables_in_naveen3333 | Table_type |
++----------------------+------------+
+| VIEW13               | VIEW       |
+| View                 | VIEW       |
+| t_movies             | VIEW       |
+| top_movies           | VIEW       |
++----------------------+------------+
+4 rows in set (0.000 sec)
+ 
+mysql> select *from movie where m_id in (select m_id from direct inner join director on direct.d_id=director.d_id where fname='Karan');
++------+--------+--------------+-------+
+| m_id | title  | release_date | mrank |
++------+--------+--------------+-------+
+|    1 | Neelam | 2019-12-02   | C     |
++------+--------+--------------+-------+
+1 row in set (0.01 sec)
+ 
+mysql> select *from actor
+    -> ;
++------+----------+--------+------+--------+
+| a_id | fname    | lname  | age  | gender |
++------+----------+--------+------+--------+
+|  901 | Salman   | Khan   |   68 | M      |
+|  902 | Shahid   | Kapoor |   64 | M      |
+|  903 | Sonali   | Singh  |   30 | F      |
+|  904 | Shraddha | Kapoor |   35 | F      |
+|  905 | Kanika   | Singh  |   38 | F      |
+|  906 | Salman   | Khan   |   78 | M      |
++------+----------+--------+------+--------+
+6 rows in set (0.00 sec)
+ 
+mysql> select *from movie where m_id in (select m_id from direct inner join director on direct.d_id=director.d_id where fname=‘Yash' and lname=‘Chopra’);
++------+--------+--------------+-------+
+| m_id | title  | release_date | mrank |
++------+--------+--------------+-------+
+|    1 | Neelam | 2019-12-02   | C     |
++------+--------+--------------+-------+
+1 row in set (0.01 sec)
+ 
+mysql> select *from actor
+    -> ;
++------+----------+--------+------+--------+
+| a_id | fname    | lname  | age  | gender |
++------+----------+--------+------+--------+
+|  901 | Salman   | Khan   |   68 | M      |
+|  902 | Shahid   | Kapoor |   64 | M      |
+|  903 | Sonali   | Singh  |   30 | F      |
+|  904 | Shraddha | Kapoor |   35 | F      |
+|  905 | Kanika   | Singh  |   38 | F      |
+|  906 | Salman   | Khan   |   78 | M      |
++------+----------+--------+------+--------+
+6 rows in set (0.00 sec)
+ 
+mysql> select distinct fname, lname from actor;
++----------+--------+
+| fname    | lname  |
++----------+--------+
+| Salman   | Khan   |
+| Shahid   | Kapoor |
+| Sonali   | Singh  |
+| Shraddha | Kapoor |
+| Kanika   | Singh  |
++----------+--------+
+5 rows in set (0.00 sec)
+ 
+mysql> select *from movie;
++------+------------+--------------+-------+
+| m_id | title      | release_date | mrank |
++------+------------+--------------+-------+
+|    1 | Neelam     | 2019-12-02   | C     |
+|    2 | XXX        | 2013-05-15   | D     |
+|    3 | KeepBreath | 2010-10-19   | A     |
+|    4 | Badla      | 2016-10-23   | B     |
++------+------------+--------------+-------+
+4 rows in set (0.00 sec)
+ 
+mysql> update movie set release_date=20010912 where title='Sholay';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+ 
+mysql> select *from movie;
++------+------------+--------------+-------+
+| m_id | title      | release_date | mrank |
++------+------------+--------------+-------+
+|    1 | Neelam     | 2019-12-02   | C     |
+|    2 | XXX        | 2013-05-15   | D     |
+|    3 | KeepBreath | 2010-10-19   | A     |
+|    4 | Badla      | 2016-10-23   | B     |
+|    5 | Sholay     | 2001-09-12   | A     |
++------+------------+--------------+-------+
+5 rows in set (0.00 sec)
+ 
+mysql> alter table actor add pay int;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+ 
+mysql> select *from actor;
++------+----------+--------+------+--------+------+
+| a_id | fname    | lname  | age  | gender | pay  |
++------+----------+--------+------+--------+------+
+|  901 | Salman   | Khan   |   68 | M      | NULL |
+|  902 | Shahid   | Kapoor |   64 | M      | NULL |
+|  903 | Sonali   | Singh  |   30 | F      | NULL |
+|  904 | Shraddha | Kapoor |   35 | F      | NULL |
+|  905 | Kanika   | Singh  |   38 | F      | NULL |
+|  906 | Salman   | Khan   |   78 | M      | NULL |
++------+----------+--------+------+--------+------+
+6 rows in set (0.00 sec)
+ 
+select *from actor
+    -> ;
++------+----------+--------+--------+--------+
+| a_id | fname    | lname  | gender | pay    |
++------+----------+--------+--------+--------+
+|  901 | Sharukh  | Khan   | M      |  66000 |
+|  902 | Shahid   | Kapoor | M      |  76000 |
+|  903 | Sonali   | Singh  | F      |  96000 |
+|  904 | Shraddha | Kapoor | F      | 100000 |
+|  905 | Kareena  | Kapoor | F      |  36000 |
++------+----------+--------+--------+--------+
+5 rows in set (0.00 sec)
+ 
+mysql> update actor set pay=pay+60000 where a_id in  (select a_id from actorcast inner join movie on actorcast.m_id=movie.m_id where title='Ram');
+Query OK, 3 rows affected (0.00 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+ 
+mysql> select *from actor; 
++------+----------+--------+--------+--------+
+| a_id | fname    | lname  | gender | pay    |
++------+----------+--------+--------+--------+
+|  901 | Sharukh  | Khan   | M      | 126000 |
+|  902 | Shahid   | Kapoor | M      |  76000 |
+|  903 | Sonali   | Singh  | F      | 156000 |
+|  904 | Shraddha | Kapoor | F      | 100000 |
+|  905 | Kareena  | Kapoor | F      |  96000 |
++------+----------+--------+--------+--------+
+ 
+ 
+ 
+mysql> delete from actor where pay > 40000 and pay<70000;
+Query OK, 1 row affected (0.01 sec) 
+ 
+mysql> select *from movie where title like 'K%';
++------+------------+--------------+-------+
+| m_id | title      | release_date | mrank |
++------+------------+--------------+-------+
+|    3 | KeepBreath | 2010-10-19   | A     |
++------+------------+--------------+-------+
+1 row in set (0.01 sec)
+ 
+ 
+mysql> select *from actor where a_id in (select a_id from actorcast inner join movie on actorcast.m_id=movie.m_id where  title in ('Dangal','War','PK'));
++------+----------+--------+--------+--------+
+| a_id | fname    | lname  | gender | pay    |
++------+----------+--------+--------+--------+
+|  901 | Sharukh  | Khan   | M      |  60000 |
+|  902 | Shahid   | Kapoor | M      |  70000 |
+|  903 | Sonali   | Singh  | F      |  90000 |
+|  904 | Shraddha | Kapoor | F      | 100000 |
+|  905 | Kareena  | Kapoor | F      |  30000 |
++------+----------+--------+--------+--------+
+5 rows in set (0.00 sec)
+ 
+mysql> select avg(pay) from actor where a_id in (select a_id from actorcast inner join movie on actorcast.m_id=movie.m_id where  title in ('Airlift'));
++------------+
+| avg(pay)   |
++------------+
+| 60000.0000 |
++------------+
+1 row in set (0.01 sec)
+ 
+mysql> select count(a_id) from actor where a_id in (select a_id from actorcast inner join movie on actorcast.m_id=movie.m_id where  title in ('Lagaan'));
++-------------+
+| count(a_id) |
++-------------+
+|           3 |
++-------------+
+1 row in set (0.01 sec)
+ 
+mysql> select max(pay) , min(pay) from actor where a_id in (select a_id from actorcast inner join movie on actorcast.m_id=movie.m_id where  title in ('PK'));
++----------+----------+
+| max(pay) | min(pay) |
++----------+----------+
+|   100000 |    70000 |
++----------+----------+
+1 row in set (0.00 sec)
+ 
+mysql> select sum(pay) from actor where a_id in  (select a_id from actorcast inner join movie on actorcast.m_id=movie.m_id where title='War');
++----------+
+| sum(pay) |
++----------+
+|   378000 |
++----------+
+1 row in set (0.00 sec)
+ 
+mysql> select *from movie order by title asc ;
++------+------------+--------------+-------+
+| m_id | title      | release_date | mrank |
++------+------------+--------------+-------+
+|    4 | Badla      | 2016-10-23   | B     |
+|    3 | KeepBreath | 2010-10-19   | A     |
+|    1 | Neelam     | 2019-12-02   | C     |
+|    5 | Sholay     | 2001-09-12   | A     |
+|    2 | XXX        | 2013-05-15   | D     |
++------+------------+--------------+-------+
+5 rows in set (0.00 sec)
+ 
+mysql> select *from movie order by release_date desc ;
++------+------------+--------------+-------+
+| m_id | title      | release_date | mrank |
++------+------------+--------------+-------+
+|    1 | Neelam     | 2019-12-02   | C     |
+|    4 | Badla      | 2016-10-23   | B     |
+|    2 | XXX        | 2013-05-15   | D     |
+|    3 | KeepBreath | 2010-10-19   | A     |
+|    5 | Sholay     | 2001-09-12   | A     |
++------+------------+--------------+-------+
+5 rows in set (0.00 sec)
+ 
+mysql> select a_id, fname from movie, actor where title='Lagaan' union select a_id, fname from movie ,actor where title='Sholay';
++------+----------+
+| a_id | fname    |
++------+----------+
+|  901 | Sharukh  |
+|  902 | Shahid   |
+|  903 | Sonali   |
+|  904 | Shraddha |
+|  905 | Kareena  |
++------+----------+
+mysql> select a_id, fname from movie , actor where title= 'PK' or title='War';
++------+----------+
+| a_id | fname    |
++------+----------+
+|  901 | Sharukh  |
+|  901 | Sharukh  |
+|  902 | Shahid   |
+|  902 | Shahid   |
+|  903 | Sonali   |
+|  903 | Sonali   |
+|  904 | Shraddha |
+|  904 | Shraddha |
+|  905 | Kareena  |
+|  905 | Kareena  |
++------+----------+
+10 rows in set (0.01 sec)
+mysql> select a_id from actor where a_id in
+    -> (select a_id from S_cast 
+    -> inner join movie on
+    -> movie.m_id=S_cast.m_id 
+    -> where title in("Lagaan", "PK"));
++------+
+| a_id |
++------+
+| 901 |
+| 902 |
+| 904 |
++------+
+3 rows in set (0.00 sec)
+ 
+mysql> select a_id from actor where a_id in (select a_id from S_cast  inner join movie on movie.m_id=S_cast.m_id  where title in("Lagaan") and title not in ("War"));
++------+
+| a_id |
++------+
+| 903 |
+| 902 |
++------+
+2 rows in set (0.00 sec)

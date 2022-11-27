@@ -1,0 +1,89 @@
+
+MariaDB [(none)]> create database 3333ass7;
+Query OK, 1 row affected (0.037 sec)
+
+MariaDB [(none)]> use 3333ass7;
+Database changed
+
+MariaDB [3333ass7]> create table library (bookid int, book_name varchar(20), publication varchar(20));
+Query OK, 0 rows affected (0.211 sec)
+
+MariaDB [3333ass7]> create table library_audit (sno int auto_increment primary key, old_book varchar(20), new_book varchar(20), operation varchar(20), time datetime);
+Query OK, 0 rows affected (0.168 sec)
+
+MariaDB [3333ass7]>  insert into library values(1,"DBMS","ABC");
+Query OK, 1 row affected (0.027 sec)
+
+MariaDB [3333ass7]>  insert into library values(2,"CNS","TCN");
+Query OK, 1 row affected (0.028 sec)
+
+MariaDB [3333ass7]>  insert into library values(3,"SPOS","NXC");
+Query OK, 1 row affected (0.027 sec)
+
+MariaDB [3333ass7]> select *from library;
++--------+-----------+-------------+
+| bookid | book_name | publication |
++--------+-----------+-------------+
+|      1 | DBMS      | ABC         |
+|      2 | CNS       | TCN         |
+|      3 | SPOS      | NXC         |
++--------+-----------+-------------+
+3 rows in set (0.000 sec)
+
+MariaDB [3333ass7]> select *from library_audit;
+Empty set (0.001 sec)
+
+MariaDB [3333ass7]>  delimiter //
+MariaDB [3333ass7]> create trigger T_update
+    -> after update on library
+    -> for each row begin
+    -> declare action varchar(20);
+    -> declare newbook varchar(20);
+    -> declare oldbook varchar(20);
+    -> set oldbook=old.book_name;
+    -> set newbook=new.book_name;
+    -> set action='update';
+    -> insert into library_audit(old_book,new_book,operation,time)
+    -> values(oldbook,newbook,action,now());
+    -> end; //
+Query OK, 0 rows affected (0.126 sec)
+
+MariaDB [3333ass7]> update library set book_name='HCI' where bookid=1;
+    -> //
+Query OK, 1 row affected (0.045 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [3333ass7]> select *from library_audit;
+    -> //
++-----+----------+----------+-----------+---------------------+
+| sno | old_book | new_book | operation | time                |
++-----+----------+----------+-----------+---------------------+
+|   1 | DBMS     | HCI      | update    | 2022-09-21 11:09:46 |
++-----+----------+----------+-----------+---------------------+
+1 row in set (0.000 sec)
+
+MariaDB [3333ass7]>  create trigger trigger_delete
+    -> after delete on library for each row begin
+    -> declare action varchar(20);
+    -> declare book varchar(20);
+    -> set book=old.book_name;
+    -> set action='delete';
+    -> insert into library_audit(old_book,operation,time) values(book,action,now());
+    -> end; //
+Query OK, 0 rows affected (0.246 sec)
+
+MariaDB [3333ass7]> delete from library where bookid=3;//
+Query OK, 1 row affected (0.027 sec)
+
+MariaDB [3333ass7]> select *from library_audit;
+    -> //
++-----+----------+----------+-----------+---------------------+
+| sno | old_book | new_book | operation | time                |
++-----+----------+----------+-----------+---------------------+
+|   1 | DBMS     | HCI      | update    | 2022-09-21 11:09:46 |
+|   2 | SPOS     | NULL     | delete    | 2022-09-21 11:12:53 |
++-----+----------+----------+-----------+---------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [3333ass7]> 
+

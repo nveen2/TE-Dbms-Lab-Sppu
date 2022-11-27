@@ -1,0 +1,78 @@
+
+MariaDB [(none)]> create database 3335ass5;
+Query OK, 1 row affected (0.000 sec)
+MariaDB [(none)]> use 3335ass5;
+Database changed
+MariaDB [3335ass5]> create table Marks(Roll int primary key, Name varchar(20), Totalmarks int);
+Query OK, 0 rows affected (0.147 sec)
+
+MariaDB [3335ass5]> insert into Marks values(20, 'Nishant', 1320);
+Query OK, 1 row affected (0.012 sec)
+
+MariaDB [3335ass5]> insert into Marks values(21, 'Amar', 1110);
+Query OK, 1 row affected (0.021 sec)
+
+MariaDB [3335ass5]> insert into Marks values(22, 'Arshit', 990);
+Query OK, 1 row affected (0.025 sec)
+
+MariaDB [3335ass5]> insert into Marks values(23, 'Ujjwal', 989);
+Query OK, 1 row affected (0.023 sec)
+
+MariaDB [3335ass5]> insert into Marks values(24, 'Manoj', 850);
+Query OK, 1 row affected (0.009 sec)
+
+MariaDB [3335ass5]> insert into Marks values(25, 'Mithilesh', 550);
+Query OK, 1 row affected (0.009 sec)
+
+
+MariaDB [3335ass5]> create table Result( rollno int, class varchar(20));
+Query OK, 0 rows affected (0.162 sec)
+
+MariaDB [3335ass5]> create procedure grade(in r int)
+    -> begin 
+    -> declare score int;
+    -> declare c varchar(20);
+    -> select Totalmarks into score from Marks where Roll =r;
+    -> if score <=1500 and score >=990 then
+    -> set c='Distinction';
+    -> else if score >=989 and score<=900 then
+    -> set c='First';
+    -> else if score <=899 and score >=835 then 
+    -> set c='Second';
+    -> else if score <=834 then 
+    -> set c='Pass';
+    -> end if;
+    -> insert into Result values(r,c);
+    -> end;
+    -> //
+Query OK, 0 rows affected (0.072 sec)
+
+MariaDB [3335ass5]> call grade(20);//
+Query OK, 2 rows affected (0.023 sec)
+
+MariaDB [3335ass5]> call grade(21);//
+Query OK, 2 rows affected (0.019 sec)
+
+MariaDB [3335ass5]> call grade(22);//
+Query OK, 2 rows affected (0.012 sec)
+
+MariaDB [3335ass5]> call grade(23);//
+Query OK, 2 rows affected (0.011 sec)
+
+MariaDB [3335ass5]> call grade(24);//
+Query OK, 2 rows affected (0.016 sec)
+MariaDB [3335ass5]> select *from Result;
+	-> //
++--------+-------------+
+| rollno | class       |
++--------+-------------+
+|     20 | Distinction |
+|     21 | Distinction |
+|     22 | Distinction |
+|     23 | First       |
+|     24 | Second      |
+|     25 | Pass        |
++--------+-------------+
+7 rows in set (0.000 sec)
+
+

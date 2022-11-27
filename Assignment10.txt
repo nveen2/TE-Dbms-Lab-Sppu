@@ -1,0 +1,107 @@
+ db.student.insert({Rollno:4,name:"manish",subject:"TOC",marks:70}); db.student.insert({Rollno:5,name: "ashraf",subject: "oop",marks:80}); db.student.insert({Rollno:6,name: "naveen",subject: "DSA",marks:50})
+WriteResult({ "nInserted" : 1 })
+> db.student.find()
+{ "_id" : ObjectId("6333bfa43cb45dc88552f668"), "Rollno" : 1, "name" : "mustafa", "subject" : "DMSA", "marks" : 78 }
+{ "_id" : ObjectId("6333bfde3cb45dc88552f669"), "Rollno" : 2, "name" : "nishant", "subject" : "OSD", "marks" : 75 }
+{ "_id" : ObjectId("6333bfde3cb45dc88552f66a"), "Rollno" : 3, "name" : "vipul", "subject" : "TOC", "marks" : 69 }
+{ "_id" : ObjectId("6333c0253cb45dc88552f66b"), "Rollno" : 4, "name" : "manish", "subject" : "TOC", "marks" : 70 }
+{ "_id" : ObjectId("6333c0253cb45dc88552f66c"), "Rollno" : 5, "name" : "ashraf", "subject" : "oop", "marks" : 80 }
+{ "_id" : ObjectId("6333c0253cb45dc88552f66d"), "Rollno" : 6, "name" : "naveen", "subject" : "DSA", "marks" : 50 }
+> db.students.aggregate([{$group :{_id :"$subject",marks :{$max :"$marks"}}}])
+> db.student.aggregate([{$group :{_id :"$subject",marks :{$max :"$marks"}}}])
+{ "_id" : "DSA", "marks" : 50 }
+{ "_id" : "oop", "marks" : 80 }
+{ "_id" : "TOC", "marks" : 70 }
+{ "_id" : "OSD", "marks" : 75 }
+{ "_id" : "DMSA", "marks" : 78 }
+> db.student.aggregate([{$group :{_id :"$subject",marks :{$avg :"$marks"}}}])
+{ "_id" : "DSA", "marks" : 50 }
+{ "_id" : "oop", "marks" : 80 }
+{ "_id" : "TOC", "marks" : 69.5 }
+{ "_id" : "OSD", "marks" : 75 }
+{ "_id" : "DMSA", "marks" : 78 }
+> db.student.aggregate([{$group :{_id :"$subject",marks :{$min :"$marks"}}}])
+{ "_id" : "DSA", "marks" : 50 }
+{ "_id" : "oop", "marks" : 80 }
+{ "_id" : "TOC", "marks" : 69 }
+{ "_id" : "OSD", "marks" : 75 }
+{ "_id" : "DMSA", "marks" : 78 }
+> db.student.aggregate ([{$group : {_id : "$subject", marks : {$first : "$marks"}}}]);
+{ "_id" : "DSA", "marks" : 50 }
+{ "_id" : "oop", "marks" : 80 }
+{ "_id" : "TOC", "marks" : 69 }
+{ "_id" : "OSD", "marks" : 75 }
+{ "_id" : "DMSA", "marks" : 78 }
+> db.student.aggregate ([{$group : {_id : "$subject", marks : {$last : "$marks"}}}]);
+{ "_id" : "DSA", "marks" : 50 }
+{ "_id" : "oop", "marks" : 80 }
+{ "_id" : "TOC", "marks" : 70 }
+{ "_id" : "OSD", "marks" : 75 }
+{ "_id" : "DMSA", "marks" : 78 }
+
+> db.student.aggregate ([{$group : {_id : "$subject", marks : {$sum : "$marks"}}}]); 
+{ "_id" : "DSA", "marks" : 50 }
+{ "_id" : "oop", "marks" : 80 }
+{ "_id" : "TOC", "marks" : 139 }
+{ "_id" : "OSD", "marks" : 75 }
+{ "_id" : "DMSA", "marks" : 78 }
+
+
+> db.student.aggregate ([{ $match: {subject:"TOC"}}, {$group:{_id:null,count:{$sum:1}}}]); 
+{ "_id" : null, "count" : 2 }
+
+> db.student.aggregate ([{ $match: {subject:"TOC"}}, {$sort:{marks:1}}]);
+{ "_id" : ObjectId("6333bfde3cb45dc88552f66a"), "Rollno" : 3, "name" : "vipul", "subject" : "TOC", "marks" : 69 }
+{ "_id" : ObjectId("6333c0253cb45dc88552f66b"), "Rollno" : 4, "name" : "manish", "subject" : "TOC", "marks" : 70 }
+> db.student.aggregate ([{ $match: {subject:"TOC"}}, {$sort:{marks:-1}}]);
+{ "_id" : ObjectId("6333c0253cb45dc88552f66b"), "Rollno" : 4, "name" : "manish", "subject" : "TOC", "marks" : 70 }
+{ "_id" : ObjectId("6333bfde3cb45dc88552f66a"), "Rollno" : 3, "name" : "vipul", "subject" : "TOC", "marks" : 69 }
+ db.student.aggregate ([ {$group:{_id:"$subject",count:{$sum:1}}}]);
+{ "_id" : "DSA", "count" : 1 }
+{ "_id" : "oop", "count" : 1 }
+{ "_id" : "TOC", "count" : 2 }
+{ "_id" : "OSD", "count" : 1 }
+{ "_id" : "DMSA", "count" : 1 }
+
+> db.student.createIndex({"Rollno":1})
+
+{
+	"createdCollectionAutomatically" : false,
+	"numIndexesBefore" : 1,
+	"numIndexesAfter" : 2,
+	"ok" : 1
+}
+> db.student.getIndexes()
+[
+	{
+		"v" : 2,
+		"key" : {
+			"_id" : 1
+		},
+		"name" : "_id_",
+		"ns" : "test.student"
+	},
+	{
+		"v" : 2,
+		"key" : {
+			"Rollno" : 1
+		},
+		"name" : "Rollno_1",
+		"ns" : "test.student"
+	}
+]
+> db.student.dropIndex({"Rollno":1})
+{ "nIndexesWas" : 2, "ok" : 1 }
+> db.student.getIndexes()
+[
+	{
+		"v" : 2,
+		"key" : {
+			"_id" : 1
+		},
+		"name" : "_id_",
+		"ns" : "test.student"
+	}
+]
+> 
+
